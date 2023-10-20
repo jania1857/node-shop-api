@@ -20,6 +20,16 @@ const productsInitQuery = `
     )
 `;
 
+const ordersInitQuery = `
+    CREATE TABLE IF NOT EXISTS orders (
+        id SERIAL PRIMARY KEY,
+        product_id SERIAL NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        FOREIGN KEY (product_id)
+            REFERENCES products (id)
+    )
+`;
+
 
 db.connect()
     .then(obj => {
@@ -32,11 +42,19 @@ db.connect()
 
 db.none(productsInitQuery)
     .then(() => {
-        console.log('Table "Products" were created or already exists');
+        console.log('Table "Products" was created or already exists');
     })
     .catch(error => {
         console.error('Error when creating table "Products": ', error);
     });
+
+db.none(ordersInitQuery)
+    .then(() => {
+        console.log('Table "Orders" was created or already exists');
+    })
+    .catch(error => {
+        console.error('Error when creating table "Orders": ', error);
+    })
 
 module.exports = {
     pgp, db

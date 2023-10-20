@@ -2,8 +2,14 @@ const {db} = require("../../db.connection")
 
 async function getProducts(req, res, next) {
     try {
-        const result = await db.many('SELECT * FROM "products"');
-        return res.status(200).json(result);
+        const result = await db.manyOrNone('SELECT * FROM "products"');
+        if (result == null){
+            return res.status(404).json({
+                message: "Did not find any record that matches requirements"
+            })
+        } else {
+            return res.status(200).json(result);
+        }
     } catch (error) {
         return res.status(500).json({
             message: error.message ? error.message : 'Something went wrong'
@@ -14,8 +20,14 @@ async function getProducts(req, res, next) {
 async function getProduct(req, res, next) {
     try {
         const id = req.params.productId;
-        const result = await db.one('SELECT * FROM "products" WHERE "id" = $1', [id]);
-        return res.status(200).json(result);
+        const result = await db.oneOrNone('SELECT * FROM "products" WHERE "id" = $1', [id]);
+        if (result == null){
+            return res.status(404).json({
+                message: "Did not find any record that matches requirements"
+            })
+        } else {
+            return res.status(200).json(result);
+        }
     } catch (error) {
         return res.status(500).json({
             message: error.message ? error.message : 'Something went wrong'
@@ -54,7 +66,7 @@ async function updateProduct(req, res, next) {
     }
 }
 
-async function deleteProducts(req, res, next) {
+async function deleteProduct(req, res, next) {
     try {
         const id = req.params.productId;
         await db.none('DELETE FROM products WHERE id=$1', [id]);
@@ -73,5 +85,5 @@ module.exports = {
     getProduct,
     addProduct,
     updateProduct,
-    deleteProducts
+    deleteProduct
 }

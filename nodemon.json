@@ -1,0 +1,9 @@
+{
+  "env": {
+    "pgusername": "postgres",
+    "pgpassword": "admin",
+    "pghostname": "localhost",
+    "pgport": 5432,
+    "pgdatabase": "shop-api"
+  }
+}

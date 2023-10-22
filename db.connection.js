@@ -16,7 +16,8 @@ const productsInitQuery = `
     CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
-        price NUMERIC NOT NULL
+        price NUMERIC NOT NULL,
+        product_image VARCHAR(255) NOT NULL
     )
 `;
 
@@ -30,7 +31,39 @@ const ordersInitQuery = `
     )
 `;
 
+const usersInitQuery = `
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL
+    )
+`;
 
+async function initDB() {
+    await db.none(productsInitQuery)
+        .then(() => {
+            console.log('Table "Products" was created or already exists');
+        })
+        .catch(error => {
+            console.error('Error when creating table "Products": ', error);
+        });
+
+    await db.none(ordersInitQuery)
+        .then(() => {
+            console.log('Table "Orders" was created or already exists');
+        })
+        .catch(error => {
+            console.error('Error when creating table "Orders": ', error);
+        });
+
+    await db.none(usersInitQuery)
+        .then(() => {
+            console.log('Table "Users" was created or already exists');
+        })
+        .catch(error => {
+            console.error('Error when creating table "Users": ', error);
+        })
+}
 db.connect()
     .then(obj => {
         console.log('Connected with database');
@@ -40,21 +73,9 @@ db.connect()
         console.error('Error when connecting with database: ', error);
     });
 
-db.none(productsInitQuery)
-    .then(() => {
-        console.log('Table "Products" was created or already exists');
-    })
-    .catch(error => {
-        console.error('Error when creating table "Products": ', error);
-    });
+initDB();
 
-db.none(ordersInitQuery)
-    .then(() => {
-        console.log('Table "Orders" was created or already exists');
-    })
-    .catch(error => {
-        console.error('Error when creating table "Orders": ', error);
-    })
+
 
 module.exports = {
     pgp, db

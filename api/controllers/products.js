@@ -36,11 +36,10 @@ async function getProduct(req, res, next) {
 }
 
 async function addProduct(req, res, next) {
-    console.log(req.file);
     try {
         const name = req.body.name;
         const price = req.body.price;
-        const productImage = file.path;
+        const productImage = req.file.path;
         await db.none('INSERT INTO products(name, price, product_image) VALUES ($1, $2, $3)', [name, price, productImage]);
         return res.status(201).json({
             message: "Product created successfully"

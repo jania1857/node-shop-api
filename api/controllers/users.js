@@ -1,6 +1,6 @@
 const {db} = require("../../db.connection");
 const bcrypt = require('bcrypt');
-const {response} = require("express");
+const jwt = require('jsonwebtoken');
 
 async function register(req, res, next) {
     const email = req.body.email;
@@ -73,8 +73,19 @@ async function login(req, res, next) {
                     })
                 }
                 if (resp) {
+                    const token = jwt.sign(
+                        {
+                        email: result.email,
+                        userId: result.id
+                    },
+                        process.env.SECRET_KEY,
+                        {
+                            expiresIn: "1h"
+                        },
+
+                        )
                     return res.status(200).json({
-                        message: "Auth successful"
+                        token: token
                     })
                 }
                 return res.status(401).json({

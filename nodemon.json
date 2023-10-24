@@ -4,6 +4,7 @@
     "pgpassword": "admin",
     "pghostname": "localhost",
     "pgport": 5432,
-    "pgdatabase": "shop-api"
+    "pgdatabase": "shop-api",
+    "SECRET_KEY": "l5I1sY8ATCZ1MYKZoBwGnDH5rVhd8r57"
   }
 }
